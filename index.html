@@ -8,11 +8,12 @@
 	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 	<script language="javascript" src="https://api-maps.yandex.ru/2.1/?apikey=d9565bb4-0bfd-481a-909e-ab965ec0bcf0&lang=ru_RU"></script>
 	<script src="https://yastatic.net/jquery/2.2.3/jquery.min.js"></script>
+	<script src="lands.js"></script>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="format-detection" content="telephone=no">
 
-	<!--script language="javascript">
+	<script language="javascript">
 		ymaps.ready(init);
 
 		function init() {
@@ -23,62 +24,20 @@
 					searchControlProvider: 'yandex#search'
 				});
 
-
-			// Создаем многоугольник, используя вспомогательный класс Polygon.
-			var myPolygon1 = new ymaps.Polygon([[[60.2077, 30.2809], [60.2077, 30.2817], [60.2075, 30.2817], [60.2075, 30.2809]]],
-			{
-				hintContent: "Долг: 100 000р"
-			},
-			{
-				fillColor: '#00FF0088',
-				strokeColor: '#FF0000FF'
-			});
-
-			myMap.geoObjects.add(myPolygon1);
-			
-			var myPolygon2 = new ymaps.Polygon([[[60.21034371372501,30.288201060003157],[60.210335705016796,30.28864630669963],[60.20990857106885,30.288614120191447],[60.209921919089226,30.288147415822845],[60.21034371372501,30.288201060003157]]],
-			{
-				hintContent: "Долг: 100р"
-			},
-			{
-				fillColor: '#00FF0088',
-				strokeColor: '#FF0000FF'
-			});
-
-			myMap.geoObjects.add(myPolygon2);
+			initPolygons(myMap);
 		}
-	</script-->
-	
-	<script language="javascript">
-		ymaps.ready(init);
 
-		function init() {
-		    var map = new ymaps.Map('map', {
-					center: [60.2077, 30.2809],
-					zoom: 16,
-					controls: ['zoomControl']
-				}),
-				objectManager = new ymaps.ObjectManager();
-			map.controls.get('zoomControl').options.set({size: 'small'});
-			// Загружаем GeoJSON файл, экспортированный из Конструктора карт.
-			$.getJSON('land.geojson')
-				.done(function (geoJson) {
-
-					geoJson.features.forEach(function (obj) {
-						// Задаём контент балуна.
-						obj.properties.balloonContent = obj.properties.description;
-						// Задаём пресет для меток с полем iconCaption.
-						if (obj.properties.iconCaption) {
-							obj.options = {
-								preset: "islands#greenDotIconWithCaption"
-							}
-						}
-					});
-					// Добавляем описание объектов в формате JSON в менеджер объектов.
-					objectManager.add(geoJson);
-					// Добавляем объекты на карту.
-					map.geoObjects.add(objectManager);
-				});
+		function addPolygon(myMap, coords, hint, fillColor, strokeColor) {
+			var myPolygon = new ymaps.Polygon(coords,
+			{
+				hintContent: hint
+			},
+			{
+				fillColor: fillColor,
+				strokeColor: strokeColor
+			});
+			
+			myMap.geoObjects.add(myPolygon);
 		}
 	</script>
 </head>
